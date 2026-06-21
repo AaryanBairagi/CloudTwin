@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"cloudtwin-agent/internal/collector"
 	"cloudtwin-agent/internal/publisher"
+	"cloudtwin-agent/internal/config"
 	"time"
 )
 
-func Run() {
-	dockerCollector := collector.NewDockerCollector("/var/run/docker.sock")
-	mqttPublisher , err := publisher.NewMQTTPublisher("tcp://localhost:1883", "cloudtwin/snapshots")
+func Run(config *config.Config) {
+	dockerCollector := collector.NewDockerCollector(config.DockerSocket)
+	mqttPublisher , err := publisher.NewMQTTPublisher(config.MQTTBroker, config.MQTTTopic)
 	if err != nil {
 		panic(err)
 	}
 
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(config.PollInterval * time.Second)
 	
 	defer ticker.Stop()
 

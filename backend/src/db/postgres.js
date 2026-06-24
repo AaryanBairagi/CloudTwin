@@ -1,4 +1,11 @@
+require('dotenv').config();
 const { Pool } = require('pg');
+
+console.log({
+    host: process.env.PGHOST,
+    user: process.env.PGUSER,
+    database: process.env.PGDATABASE
+});
 
 const pool = new Pool({
     host : process.env.PGHOST || 'localhost',
@@ -10,7 +17,7 @@ const pool = new Pool({
 });
 
 pool.on('error' , (err) => {
-    console.log('[postgres] unexpected pool error : ' , error.msg);
+    console.error('[postgres] unexpected pool error : ' , err.message);
 });
 
 async function query(text , params){

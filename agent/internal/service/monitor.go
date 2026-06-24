@@ -15,7 +15,7 @@ func Run(config *config.Config) {
 		panic(err)
 	}
 
-	ticker := time.NewTicker(config.PollInterval * time.Second)
+	ticker := time.NewTicker(time.Duration(config.PollInterval) * time.Second)
 	
 	defer ticker.Stop()
 

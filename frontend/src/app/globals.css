@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  /* base surface â€” near-black, not pure black, so cards have somewhere to sit */
+  --bg-base: #0b0e12;
+  --bg-surface: #11151b;
+  --bg-surface-raised: #161b22;
+  --border-hairline: #232a33;
+
+  /* text */
+  --text-primary: #e6e9ed;
+  --text-secondary: #8b96a3;
+  --text-tertiary: #5b6573;
+
+  /* system chrome accent â€” not tied to health status */
+  --accent-system: #5b8def;
+
+  /* status colors â€” muted resting state, full saturation reserved for alerts */
+  --status-healthy: #4ade80;
+  --status-healthy-dim: #1f3a2b;
+  --status-warning: #fbbf24;
+  --status-warning-dim: #3a2f1a;
+  --status-critical: #f87171;
+  --status-critical-dim: #3a1f1f;
+  --status-unknown: #5b6573;
+}
+
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-raised: var(--bg-surface-raised);
+  --color-border-hairline: var(--border-hairline);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-accent-system: var(--accent-system);
+  --color-status-healthy: var(--status-healthy);
+  --color-status-warning: var(--status-warning);
+  --color-status-critical: var(--status-critical);
+  --color-status-unknown: var(--status-unknown);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+@keyframes pulse-healthy {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes pulse-warning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@keyframes pulse-critical {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.pulse-healthy {
+  animation: pulse-healthy 3.2s ease-in-out infinite;
+}
+
+.pulse-warning {
+  animation: pulse-warning 1.8s ease-in-out infinite;
+}
+
+.pulse-critical {
+  animation: pulse-critical 0.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-healthy,
+  .pulse-warning,
+  .pulse-critical {
+    animation: none;
+  }
+}

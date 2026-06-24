@@ -153,7 +153,12 @@ func BuildSnapshot(container Container, stats *Stats) Snapshot {
 
 	memMB := float64(stats.MemoryStats.Usage) / (1024 * 1024)
 	memLimitMB := float64(stats.MemoryStats.Limit) / (1024 * 1024)
-	memPercent := (memMB / memLimitMB) * 100
+	
+	memPercent := 0.0
+	if memLimitMB > 0 {
+		memPercent = (memMB / memLimitMB) * 100
+	}
+
 	cpuPercent := CalculateCPUPercent(stats)
 	timestamp := time.Now().UTC().Format(time.RFC3339)
 	name := strings.TrimPrefix(container.Names[0], "/")

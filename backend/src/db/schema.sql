@@ -23,7 +23,27 @@ CREATE TABLE IF NOT EXISTS metric_snapshots (
   payload         JSONB NOT NULL
 );
 
--- Most twin lookups + dashboard load want "all twins, most recent state" --
--- that's just the twins table. Snapshots are for history/sparklines/what-if later.
+CREATE TABLE IF NOT EXISTS rules (
+    id SERIAL PRIMARY KEY,
+    metric TEXT NOT NULL,
+    operator TEXT NOT NULL,
+    threshold DOUBLE PRECISION NOT NULL,
+    severity TEXT NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS alerts (
+    id BIGSERIAL PRIMARY KEY,
+    twin_id TEXT NOT NULL,
+    rule_id INTEGER REFERENCES rules(id),
+    metric TEXT NOT NULL,
+    current_value DOUBLE PRECISION,
+    threshold DOUBLE PRECISION,
+    severity TEXT NOT NULL,
+    message TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_snapshots_twin_time
   ON metric_snapshots (twin_id, captured_at DESC);

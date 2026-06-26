@@ -2,7 +2,13 @@ const express = require('express');
 const mqtt = require('mqtt');
 const cors = require('cors');
 const { upsertTwin , saveSnapshot } = require('./twin/twinEngine');
+const createAlert = require('./rules/alertManager');
+const { evaluateRule, getEnabledRules } = require('./rules/ruleEvaluator');
+
+
 const twinsRoute = require('./routes/twins');
+const alertRoutes = require('./routes/alerts');
+
 
 const app = express();
 const port = 4000;
@@ -12,6 +18,8 @@ app.use(cors({
 }));
 
 app.use('/twins' , twinsRoute);
+app.use('/alerts' , alertRoutes);
+
 
 app.listen(port, () => {
     console.log(`App running at port ${port}`)
@@ -29,6 +37,18 @@ client.on('message', async (topic, message) => {
         const snapshot = JSON.parse(message.toString());
         await upsertTwin(snapshot);
         await saveSnapshot(snapshot);
+
+        const rules = await getEnabledRules();
+        for(const rule of rules){
+            const matched = evaluateRule(snapshot,rule);
+
+            if(matched){
+                await createAlert(snapshot,rule);
+                console.log(
+                    `Alert created for ${snapshot.name} (${rule.metric} ${rule.operator} ${rule.threshold})`
+                );
+            }
+        }
 
         console.log("Stored snapshot for:", snapshot.name);
     } catch(err) {

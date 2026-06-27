@@ -1,3 +1,3 @@
-docker compose up -d //to activate the conatiners
+docker compose up -d //to activate the containers
 docker ps //lists all the running/active containers
 docker exec -it cloudtwin-postgres psql -U cloudtwin -d cloudtwin

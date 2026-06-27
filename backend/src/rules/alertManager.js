@@ -2,7 +2,7 @@ const { query } = require('../db/postgres');
 
 async function createAlert (snapshot , rule) {
     await query(
-        `INSERT INTO alerts
+        `INSERT INTO alerts (
             twin_id,
             rule_id,
             metric,
@@ -10,6 +10,7 @@ async function createAlert (snapshot , rule) {
             threshold,
             severity,
             message
+        )
         VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7)
         `,
         [

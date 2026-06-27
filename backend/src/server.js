@@ -2,24 +2,26 @@ const express = require('express');
 const mqtt = require('mqtt');
 const cors = require('cors');
 const { upsertTwin , saveSnapshot } = require('./twin/twinEngine');
-const createAlert = require('./rules/alertManager');
+const { createAlert } = require('./rules/alertManager');
 const { evaluateRule, getEnabledRules } = require('./rules/ruleEvaluator');
 
-
+//EXPRESS ROUTER - ROUTES
 const twinsRoute = require('./routes/twins');
 const alertRoutes = require('./routes/alerts');
-
+const actionRoutes = require('./routes/actions');
 
 const app = express();
 const port = 4000;
 
+
+//MIDDLEWARE
 app.use(cors({
    origin : 'http://localhost:3000'
 }));
 
 app.use('/twins' , twinsRoute);
 app.use('/alerts' , alertRoutes);
-
+app.use('/actions' , actionRoutes);
 
 app.listen(port, () => {
     console.log(`App running at port ${port}`)

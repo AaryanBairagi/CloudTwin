@@ -45,5 +45,20 @@ CREATE TABLE IF NOT EXISTS alerts (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+
+CREATE TABLE IF NOT EXISTS actions (
+    id BIGSERIAL PRIMARY KEY,
+    twin_id TEXT NOT NULL REFERENCES twins(twin_id) ON DELETE CASCADE,
+    alert_id BIGINT REFERENCES alerts(id) ON DELETE SET NULL,
+    action_type TEXT NOT NULL,
+    reason TEXT,
+    status TEXT NOT NULL DEFAULT 'pending',
+    approved_at TIMESTAMPTZ,
+    executed_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_snapshots_twin_time
   ON metric_snapshots (twin_id, captured_at DESC);

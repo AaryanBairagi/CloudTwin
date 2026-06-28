@@ -14,4 +14,15 @@ async function connectRedis(){
     }
 }
 
-module.exports = { client , connectRedis }
+async function enqueueCommand(twinId , command){
+    await client.rPush(`commands : ${twinId}` , JSON.stringify(command));
+}
+
+async function dequeueCommand(twinId){
+    const data = await client.lPop(`commands : ${twinId}`);
+    if(!data) return null;
+    return JSON.parse(data);
+}
+
+
+module.exports = { client , connectRedis , enqueueCommand , dequeueCommand }

@@ -45,3 +45,47 @@ router.get("/claim", async (req, res) => {
     }
 
 });
+
+router.post("/:id/ack", async (req, res) => {
+
+    try {
+
+        const { success } = req.body;
+
+        const status = success ? "completed" : "failed";
+        const now = success ? "completed_at = NOW()," : "";
+
+        const result = await query(
+            `
+            UPDATE actions
+            SET
+                ${now}
+                status = $1
+            WHERE id = $2
+            RETURNING *
+            `,
+            [status, req.params.id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: "Action not found"
+            });
+        }
+
+        res.json({
+            message: "Acknowledged",
+            action: result.rows[0]
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            error: "Failed to acknowledge command"
+        });
+
+    }
+
+});

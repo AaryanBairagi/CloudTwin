@@ -124,6 +124,39 @@ func (d *DockerCollector) GetStats(containerID string) (*Stats, error) {
 	return &stats, nil
 }
 
+func (d *DockerCollector) RestartContainer(containerID string) error {
+
+	url := fmt.Sprintf(
+		"http://unix/containers/%s/restart?t=10",
+		containerID,
+	)
+
+	req, err := http.NewRequest(
+		http.MethodPost,
+		url,
+		nil,
+	)
+	if err != nil {
+		return err
+	}
+
+	resp, err := d.client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 300 {
+		return fmt.Errorf(
+			"failed to restart container: %s",
+			resp.Status,
+		)
+	}
+
+	return nil
+}
+
 //in GO lowercase first letter of functon name means its a private function nad uppercase means its public function
 
 

@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"time"
-
 	"cloudtwin-agent/internal/collector"
 	"cloudtwin-agent/internal/commands"
 	"cloudtwin-agent/internal/config"
@@ -40,10 +39,10 @@ func Run(config *config.Config) {
 }
 
 func runMetricsLoop(
-	dockerCollector *collector.DockerCollector,
-	mqttPublisher *publisher.MQTTPublisher,
-	config *config.Config,
-) {
+		dockerCollector *collector.DockerCollector,
+		mqttPublisher *publisher.MQTTPublisher,
+		config *config.Config,
+	) {
 
 	ticker := time.NewTicker(
 		time.Duration(config.PollInterval) * time.Second,
@@ -92,10 +91,10 @@ func runMetricsLoop(
 }
 
 func runCommandLoop(
-	dockerCollector *collector.DockerCollector,
-	poller *commands.Poller,
-	config *config.Config,
-) {
+		dockerCollector *collector.DockerCollector,
+		poller *commands.Poller,
+		config *config.Config,
+	) {
 
 	ticker := time.NewTicker(
 		time.Duration(config.CommandPollInterval) * time.Second,

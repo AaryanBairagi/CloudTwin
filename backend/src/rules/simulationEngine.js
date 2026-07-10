@@ -1,0 +1,5 @@
+const HORIZON_SECONDS = 300;
+const DANGER_CPU = 90;
+const DANGER_MEM = 88;
+const LOOKBACK_SECONDS = 600;
+

@@ -9,19 +9,20 @@ const { evaluateRule, getEnabledRules } = require('./rules/ruleEvaluator');
 const twinsRoute = require('./routes/twins');
 const alertRoutes = require('./routes/alerts');
 const actionRoutes = require('./routes/actions');
+const simulateRoutes = require('./routes/simulate');
+
 
 const app = express();
 const port = 4000;
 
 
 //MIDDLEWARE
-app.use(cors({
-   origin : 'http://localhost:3000'
-}));
+app.use( cors( {origin : 'http://localhost:3000 '} ) );
 
 app.use('/twins' , twinsRoute);
 app.use('/alerts' , alertRoutes);
 app.use('/actions' , actionRoutes);
+app.use('/simulate' , simulateRoutes);
 
 app.listen(port, () => {
     console.log(`App running at port ${port}`)

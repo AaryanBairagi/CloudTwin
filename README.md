@@ -47,7 +47,7 @@ Monitor → Predict → Decide → Act → Confirm
 
 ## Architecture
 
-![CloudTwin Architecture](./docs/diagrams/cloud_twin_architecture_diagram.png)
+![CloudTwin Architecture](./docs/diagrams/cloudtwin_system_architecture.png)
 
 The system is structured across three independent planes:
 

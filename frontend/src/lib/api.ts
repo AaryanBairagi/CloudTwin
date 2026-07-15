@@ -1,4 +1,5 @@
 import type { HistoryPoint, Twin } from "@/types/twin";
+import type { SimulationResult } from "@/types/simulation";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:4000";
 
@@ -27,4 +28,13 @@ export function getTwin(twinId: string): Promise<Twin> {
 
 export function getTwinHistory(twinId: string): Promise<HistoryPoint[]> {
   return fetchJson<HistoryPoint[]>(`/twins/${twinId}/history`);
+}
+
+export function simulateTwin(
+  twinId: string,
+  loadMultiplier = 2
+): Promise<SimulationResult> {
+  return fetchJson<SimulationResult>(
+    `/simulate/${twinId}?loadMultiplier=${loadMultiplier}`
+  );
 }

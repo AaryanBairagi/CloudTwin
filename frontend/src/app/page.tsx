@@ -3,6 +3,7 @@
 import { useTwins } from "@/lib/useTwins";
 import { TwinCard } from "@/components/TwinCard";
 import { FleetSummary } from "@/components/FleetSummary";
+import { WhatIfPanel } from "@/components/WhatIfPanel";
 import { timeAgo } from "@/lib/timeAgo";
 
 export default function DashboardPage() {
@@ -47,6 +48,8 @@ export default function DashboardPage() {
           ))}
         </div>
       )}
+
+      <WhatIfPanel twins={twins} />
 
       {lastUpdatedAt && (
         <p className="mt-8 text-xs text-text-tertiary">

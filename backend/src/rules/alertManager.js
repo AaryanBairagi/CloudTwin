@@ -1,7 +1,7 @@
 const { query } = require('../db/postgres');
 
-async function createAlert (snapshot , rule) {
-    await query(
+async function createAlert(snapshot, rule) {
+    const result = await query(
         `INSERT INTO alerts (
             twin_id,
             rule_id,
@@ -11,7 +11,8 @@ async function createAlert (snapshot , rule) {
             severity,
             message
         )
-        VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING id
         `,
         [
             snapshot.containerId,
@@ -23,6 +24,7 @@ async function createAlert (snapshot , rule) {
             `${rule.metric.toUpperCase()} exceeded ${rule.threshold}`
         ]
     );
-} 
+    return result.rows[0];
+}
 
 module.exports = { createAlert };
